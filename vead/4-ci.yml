@@ -1,0 +1,57 @@
+# vead/4-ci.yml → .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Paigalda lint'i tööriistad
+        run: pip install ansible-lint==26.10.1 yamllint==1.38.0
+      - name: yamllint
+        run: yamllint .
+      - name: ansible-lint
+        run: ansible-lint
+      - name: Saladuste otsing (gitleaks)
+        run: |
+          curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz | tar -xz gitleaks
+          ./gitleaks git --redact --verbose .
+
+  build:
+    needs: lint
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Image'i nimi ja versioon
+        run: |
+          echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+          echo "VERSIOON=${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+      - name: Ehita image
+        run: >
+          docker build -f stack/app/Containerfile
+          --label org.opencontainers.image.source=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY
+          -t "$IMAGE:$VERSIOON" stack/app
+      - name: Logi GHCR-i sisse
+        if: github.event_name == 'push'
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+      - name: Saada image GHCR-i
+        if: github.event_name == 'push'
+        run: docker push "$IMAGE:$VERSIOON"

@@ -1,0 +1,117 @@
+{
+  "juhendaja": "mariahkhk",
+  "pealkiri": "Lab 04 · CI/CD",
+  "tahtaeg": "11.11 kell 23:59",
+  "sildid": [
+    "K4",
+    "github-actions",
+    "ci-cd",
+    "ghcr",
+    "ansible-lint",
+    "ansible"
+  ],
+  "ulesanded": [
+    {
+      "pealkiri": "A1 · Kirjuta esimene workflow",
+      "silt": "klassitöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/lab/ (osa **A1**)\n\nTühi runner nähtud, `actions/checkout` lisatud.\n\n→ `.github/workflows/ci.yml`"
+    },
+    {
+      "pealkiri": "A2 · Lisa lint",
+      "silt": "klassitöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/lab/ (osa **A2**)\n\n`yamllint` ja `ansible-lint` pipeline'is, `ansible-lint` punane."
+    },
+    {
+      "pealkiri": "A3 · Loe punast pipeline'i ja paranda",
+      "silt": "klassitöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/lab/ (osa **A3**)\n\nViis viga parandatud, `lint` roheline, `site.yml` teine käivitus `changed=0`."
+    },
+    {
+      "pealkiri": "A4 · Otsi saladusi",
+      "silt": "klassitöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/lab/ (osa **A4**)\n\n`gitleaks` kogu ajaloost (`fetch-depth: 0`)."
+    },
+    {
+      "pealkiri": "A5 · Ehita image pärast kontrolli",
+      "silt": "klassitöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/lab/ (osa **A5**)\n\n`build` job `needs: lint`, image ehitatud."
+    },
+    {
+      "pealkiri": "B1 · Saada image GHCR-i",
+      "silt": "klassitöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/lab/ (osa **B1**)\n\n`denied` nähtud, `packages: write` ainult `build`-il, image **Packages** all."
+    },
+    {
+      "pealkiri": "B2 · Ansible tõmbab image'i GHCR-ist",
+      "silt": "klassitöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/lab/ (osa **B2**)\n\nLugemistoken Vaultis, Compose ilma `build`-ita, roll logib GHCR-i sisse.\n\n→ `group_vars/docker/vault.yml`, `stack/compose.yaml`, `roles/stack/`"
+    },
+    {
+      "pealkiri": "B3 · Tarni versioon vm3-sse",
+      "silt": "klassitöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/lab/ (osa **B3**)\n\nLeht näitab commit'i räsi, teine tarne `changed=0`.\n\n→ `logid/tarne.txt`, `logid/tarne_kontroll.txt`"
+    },
+    {
+      "pealkiri": "B4 · Tööta kaitstud main haruga",
+      "silt": "klassitöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/lab/ (osa **B4**)\n\nPush main harusse tagasi lükatud, võlts-token PR-is punane, haru ümber kirjutatud, PR liidetud."
+    },
+    {
+      "pealkiri": "README täidetud ja PR liidetud",
+      "silt": "klassitöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/lab/ (osa **Esitamine**)\n\n`README.md` täidetud, kõik main harus, Autograde K1–K5 läbitud."
+    },
+    {
+      "pealkiri": "Kodutöö I · Lugemine ja küsimused",
+      "silt": "kodutöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/homework/ (osa **I**)\n\n→ `markmed.md`, `vastused.md`"
+    },
+    {
+      "pealkiri": "Kodutöö H1 · Suitsutest enne registrit",
+      "silt": "kodutöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/homework/ (osa **H1**)\n\nPostgreSQL teenuskonteiner, `/health` enne `docker push`-i."
+    },
+    {
+      "pealkiri": "Kodutöö H2 · Skanneeri image",
+      "silt": "kodutöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/homework/ (osa **H2**)\n\nTrivy pipeline'is ja vm3-s.\n\n→ `logid/trivy.txt`"
+    },
+    {
+      "pealkiri": "Kodutöö H3 · Pööra tagasi eelmisele versioonile",
+      "silt": "kodutöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/homework/ (osa **H3**)\n\nVanem räsi ja uuesti uuem, ilma uue ehituseta.\n\n→ `logid/tagasi.txt`"
+    },
+    {
+      "pealkiri": "Kodutöö H4 · Action'ite versioonid kinni",
+      "silt": "kodutöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/homework/ (osa **H4**)\n\nIga `uses:` räsiga, Dependabot.\n\n→ `.github/dependabot.yml`"
+    },
+    {
+      "pealkiri": "Kodutöö H5 · Leia kolleegi vead",
+      "silt": "kodutöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/homework/ (osa **H5**)\n\nNeli viga kaustas `vead/`, iga kohta sümptom, põhjus, kuidas leidsid.\n\n→ `vead.md`"
+    },
+    {
+      "pealkiri": "Kodutöö III · Eneseanalüüs",
+      "silt": "kodutöö",
+      "nadal": 4,
+      "keha": "📖 Juhend: https://hkhk-automation.github.io/devops-lite/week04/homework/ (osa **III**)\n\n`vastused.md` lõpus."
+    }
+  ]
+}

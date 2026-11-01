@@ -1,0 +1,53 @@
+- name: Stacki kaust on olemas
+  ansible.builtin.file:
+    path: "{{ stack_kaust }}"
+    state: directory
+    mode: "0755"
+
+- name: K1 nginx ei hoia porti 80 kinni (seda teeb nüüd proxy-konteiner)
+  ansible.builtin.service:
+    name: nginx
+    state: stopped
+    enabled: false
+
+- name: Compose-fail ja rakendus on paigas
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/stack/{{ item }}"
+    dest: "{{ stack_kaust }}/"
+    mode: preserve
+  loop:
+    - compose.yaml
+    - app
+  notify: Stack uueneb
+
+- name: Proxy seaded on paigas
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/stack/nginx"
+    dest: "{{ stack_kaust }}/"
+    mode: preserve
+  notify: proxy laeb seaded uuesti
+
+- name: Stacki seaded on paigas
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ stack_kaust }}/.env"
+    mode: "0600"
+  no_log: true
+  notify: Stack uueneb
+
+- name: Muudatused rakenduvad kohe
+  ansible.builtin.meta: flush_handlers
+
+- name: Kontrolli, mis teenused käivad
+  ansible.builtin.command: docker compose ps --services --status running
+  args:
+    chdir: "{{ stack_kaust }}"
+  register: stack_kaivad
+  changed_when: false
+  check_mode: false
+
+- name: Kõik teenused käivad
+  ansible.builtin.command: docker compose up -d --wait --force-recreate
+  args:
+    chdir: "{{ stack_kaust }}"
+  when: stack_kaivad.stdout_lines | length < 3

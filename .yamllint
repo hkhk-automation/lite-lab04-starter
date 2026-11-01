@@ -1,0 +1,23 @@
+# YAML-i reeglid sellele repositooriumile. yamllint ja ansible-lint loevad mõlemad seda faili.
+extends: default
+
+ignore: |
+  vead/
+  logid/
+
+rules:
+  document-start: disable
+  line-length:
+    max: 160
+  truthy:
+    allowed-values: ["true", "false"]
+    check-keys: false
+  # ansible-lint nõuab neid väärtusi
+  comments:
+    min-spaces-from-content: 1
+  comments-indentation: false
+  braces:
+    max-spaces-inside: 1
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true

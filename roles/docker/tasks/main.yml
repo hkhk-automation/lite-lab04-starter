@@ -1,0 +1,36 @@
+- name: Dockeriga vastuolus paketid on eemaldatud
+  ansible.builtin.package:
+    name:
+      - podman
+      - buildah
+      - runc
+    state: absent
+
+- name: Dockeri allkirjavõti on usaldatud
+  ansible.builtin.rpm_key:
+    key: https://download.docker.com/linux/rhel/gpg
+    state: present
+
+- name: Dockeri repo on lisatud
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/rhel/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+    mode: "0644"
+
+- name: Docker on paigaldatud
+  ansible.builtin.package:
+    name: "{{ docker_paketid }}"
+    state: present
+
+- name: Docker käib
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Kasutaja on docker-grupis
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: docker
+    append: true
+  loop: "{{ docker_kasutajad }}"

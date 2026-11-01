@@ -1,0 +1,28 @@
+- name: Docker vm3-s
+  hosts: docker
+  become: true
+  roles:
+    - docker
+    - stack
+
+- name: "Kontroll: leht vastab läbi proxy"
+  hosts: docker
+  gather_facts: false
+  tasks:
+    - name: Avaleht vastab
+      ansible.builtin.uri:
+        url: "http://localhost:{{ lb_port | default(80) }}/"
+        return_content: true
+      register: vastus
+      check_mode: false
+      changed_when: false
+      retries: 5
+      delay: 2
+      until: vastus.status == 200
+
+    - name: Vastuses on rakendus ja andmebaasi loendur
+      ansible.builtin.assert:
+        that:
+          - "'Vastas:' in vastus.content"
+          - "'Külastused:' in vastus.content"
+        fail_msg: "Proxy vastas, aga mitte rakendus: {{ vastus.content | truncate(200) }}"

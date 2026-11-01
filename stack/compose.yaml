@@ -1,0 +1,54 @@
+name: labor
+
+services:
+  db:
+    image: docker.io/library/postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${DB_NIMI}
+      POSTGRES_USER: ${DB_KASUTAJA}
+      POSTGRES_PASSWORD: ${DB_PAROOL}
+    volumes:
+      - andmed:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Containerfile
+    image: localhost/labori-app:${APP_VERSIOON}
+    init: true
+    environment:
+      APP_NIMI: ${APP_NIMI}
+      APP_VERSIOON: ${APP_VERSIOON}
+      DB_HOST: db
+      DB_NIMI: ${DB_NIMI}
+      DB_KASUTAJA: ${DB_KASUTAJA}
+      DB_PAROOL: ${DB_PAROOL}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health', timeout=2)"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  proxy:
+    image: docker.io/library/nginx:1.30-alpine
+    ports:
+      - "${LB_PORT}:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d:ro
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  andmed:

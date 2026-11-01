@@ -1,0 +1,11 @@
+*.retry
+__pycache__/
+*.pyc
+.DS_Store
+*.swp
+.env
+*.env
+.vault_pass
+
+# päris .env tekib vm3-sse mallist
+!stack/.env.naide

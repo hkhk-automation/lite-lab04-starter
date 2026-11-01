@@ -1,0 +1,5 @@
+# ansible-lint seaded. Kaustas vead/ on kodutöö jaoks meelega vigased failid.
+exclude_paths:
+  - vead/
+  - logid/
+  - .github/
