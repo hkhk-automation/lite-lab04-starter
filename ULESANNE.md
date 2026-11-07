@@ -50,7 +50,7 @@ Kui jääd kinni: **Issues → New issue → Vajan abi**. Juhendaja saab teate.
 
 ## Kontroll
 
-Igal push'il main harusse käivitub automaatne kontroll **Autograde** (vahekaart **Actions**). Hinne: K1–K5 (45 p). README ja kodutöö on vabatahtlik boonus: punane rist tähendab ainult, et boonus on tegemata.
+Igal push'il main harusse käivitub automaatne kontroll **Autograde** (vahekaart **Actions**). Hinne: K1–K4 (45 p). README ja kodutöö on vabatahtlik boonus: punane rist tähendab ainult, et boonus on tegemata.
 
 | Kontroll | Punkte |
 |---|---|
